@@ -7,6 +7,7 @@ import (
 	"math"
 	"runtime"
 	"time"
+	"unsafe"
 
 	"golang.org/x/tour/pic"
 	"golang.org/x/tour/reader"
@@ -38,6 +39,27 @@ func main() {
 	deadlock2() // read empty channel deadlock
 	deadlock3() // buffered channel overflow deadlock
 	deadlock4() // for range deadlock
+	test16()
+}
+
+func test16() {
+	//var ss string
+	ss := "Hello World! Hello World! Hello World! Hello World!"
+	var ii int
+	var ff float64
+	var aa [1]uint32
+	var es struct{}
+	var xx = make([]struct{}, 10000)
+
+	//ss = "Hello World!"
+	fmt.Println("unsafe.Sizeof test: size in bytes")
+	fmt.Println("ss: ", unsafe.Sizeof(ss))
+	fmt.Printf("ss: %v, %T, %p\n", ss, ss, &ss)
+	fmt.Println("ii: ", unsafe.Sizeof(ii))
+	fmt.Println("ff: ", unsafe.Sizeof(ff))
+	fmt.Println("aa: ", unsafe.Sizeof(aa))
+	fmt.Println("es: ", unsafe.Sizeof(es))
+	fmt.Println("xx: ", unsafe.Sizeof(xx))
 }
 
 func deadlock4() {
@@ -376,15 +398,15 @@ func Sqrt(x float64) float64 {
 }
 
 // Implement SqrtFunc to return error when parameter is negative value.
-type ErrNegattiveSqrt float64
+type ErrNegativeSqrt float64
 
-func (e ErrNegattiveSqrt) Error() string {
+func (e ErrNegativeSqrt) Error() string {
 	return fmt.Sprint("cannot Sqrt negative number: ", float64(e))
 }
 
 func SqrtFunc(x float64) (float64, error) {
 	if x < 0.0 {
-		return 0, ErrNegattiveSqrt(x)
+		return 0, ErrNegativeSqrt(x)
 	}
 	z := 1.0
 	n := 0.0
